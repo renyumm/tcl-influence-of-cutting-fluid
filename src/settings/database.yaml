@@ -1,0 +1,6 @@
+type: clickhouse
+host: 10.171.211.13
+port: 8123
+database: dip
+username: dip
+password: dip%401Abc
