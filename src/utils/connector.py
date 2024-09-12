@@ -1,7 +1,7 @@
 '''
 LastEditors: renyumm strrenyumm@gmail.com
 Date: 2024-09-09 10:45:45
-LastEditTime: 2024-09-11 14:56:24
+LastEditTime: 2024-09-12 10:59:10
 FilePath: /tcl-influence-of-cutting-fluid/src/utils/connector.py
 '''
 from sqlalchemy import create_engine
@@ -31,7 +31,9 @@ class Connector(object):
             return True
     
     def get_data(self, query):
-        if self.dbtype in self.structure_db:
-            data = pd.read_sql(query, self.engine)
-            return data
+        # if self.dbtype in self.structure_db:
+        #     data = pd.read_sql(query, self.engine)
+        #     return data
+        data = pd.read_csv('src/data/切割液数据0829_rebuild.csv')
+        return data
             
