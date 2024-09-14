@@ -94,17 +94,6 @@ def remark(dataall, features, features_formul):
 
     r = Ridge(fit_intercept=False)
     r.fit(dataxy_cov_pwlf[features], dataxy_cov_pwlf['异常类型'])
-
-
-    # # 从features按顺序选取三个特征，然后对这三个特征进行函数拟合
-    # # 返回modelrs
-    # modelrs = dict()
-    # modelrs['-'] = r
-    # all_permutations = list(itertools.permutations(features, 3))
-    # for fsel in all_permutations:
-    #     rt = Ridge(fit_intercept=False)
-    #     rt.fit(dataxy_cov[list(fsel)], dataxy_cov['异常类型'])
-    #     modelrs['-'.join(list(fsel))] = rt
     
     # 寻找最好的成品值
     dataxy_cov['异常率'] = r.predict(dataxy_cov_pwlf[features])
@@ -125,8 +114,8 @@ def remark(dataall, features, features_formul):
     best_best_formul = []
     for i in range(3):
         best_best_formul.append({
-            '性质': best_quality[i],
-            '配方': best_formul[i]
+            'quality': best_quality[i],
+            'formulation': best_formul[i]
         })
     
     # 返回数据集合

@@ -1,8 +1,8 @@
 '''
 LastEditors: renyumm strrenyumm@gmail.com
 Date: 2024-09-10 11:22:39
-LastEditTime: 2024-09-11 18:32:15
-FilePath: /tcl-influence-of-cutting-fluid/src/app.py
+LastEditTime: 2024-09-14 11:45:47
+FilePath: /tcl-influence-of-cutting-fluid/src/api/app.py
 '''
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
@@ -11,7 +11,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from src.api.schema import plotItem, formulaItem, basicInfoItem
 from src.api.plot3d import plotdata
-from src.api.formula import formula
+from src.api.formula import formula, fomula_default
 from src.utils.minio_connector import copy_and_rename_folder
 import yaml
 
@@ -54,9 +54,21 @@ async def basic_info(item: basicInfoItem):
     with open('src/settings/data.yaml', 'r') as f:
         yml = yaml.safe_load(f)
         
+    item.__dict__['axis'] = ['成品电导率', '成品浊度', '成品温度']
+    
+    plot3ddata = plotdata(item)
+    plot3ddata = {
+        "data": plot3ddata,
+        "axis": item.axis+['异常率']
+    }
+    
+    formuladata = fomula_default(item)
+    
     bs = {
         "anomalies": yml['anomalies'],
-        "axis": yml['qualities']
+        "axis": yml['qualities'],
+        "formula": formuladata,
+        "plot": plot3ddata,
     }
     
     return JSONResponse(content={"data": bs})
@@ -73,7 +85,7 @@ async def plot_data(item: plotItem):
     data = plotdata(item)
     data = {
         "data": data,
-        "axis:": item.axis+['异常率']
+        "axis": item.axis+['异常率']
     }
     return JSONResponse(content={"data": data})
 
@@ -92,9 +104,13 @@ async def formula_data(item: formulaItem):
     formula_data = formula(item)
     plot_data = plotdata(item)
     
+    
     data = {
         "formula": formula_data,
-        "plot": {'data': plot_data, 'axis': item.axis+['异常率']}
+        "plot": {
+            'data': plot_data, 
+            'axis': item.axis+['异常率']
+            }
     }
     return JSONResponse(content={"data": data})
 

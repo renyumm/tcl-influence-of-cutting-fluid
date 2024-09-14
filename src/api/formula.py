@@ -1,7 +1,7 @@
 '''
 LastEditors: renyumm strrenyumm@gmail.com
 Date: 2024-09-10 17:36:01
-LastEditTime: 2024-09-11 18:06:26
+LastEditTime: 2024-09-12 12:04:40
 FilePath: /tcl-influence-of-cutting-fluid/src/api/formula.py
 '''
 import yaml
@@ -11,6 +11,9 @@ from src.utils.minio_connector import client
 from src.model import remark
 import pandas as pd
 import numpy as np
+import dill
+from io import BytesIO
+
 
 def deal_df(df, tag):
     df['异常类型'] = df['异常类型'].apply(lambda x: 1 if x in tag else 0)
@@ -66,10 +69,23 @@ def formula(item):
 
     modelmap.to_csv(f'model/modelmap.csv', index=False)
     client.fput_object('rym-best-fluid', f'{item.sessionid}/modelmap.csv', 'model/modelmap.csv')
+    
+    with open('model/model.pkl', 'wb') as f:
+        dill.dump(best_best_formul, f)
+    client.fput_object('rym-best-fluid', f'{item.sessionid}/model.pkl', 'model/model.pkl')
         
     # 保存模型, 返回结果
     return best_best_formul
 
+
+def fomula_default(item):
+    bucket_name = "rym-best-fluid"
+    object_name = f"{item.sessionid}/model.pkl"
+    response = client.get_object(bucket_name, object_name)
+    data = BytesIO(response.read())  # Read bytes from the response
+    data = dill.load(data)
+    
+    return data
 
 
 if __name__ == '__main__':

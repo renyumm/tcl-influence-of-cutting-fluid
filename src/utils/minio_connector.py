@@ -1,7 +1,7 @@
 '''
 LastEditors: renyumm strrenyumm@gmail.com
 Date: 2024-09-11 13:30:33
-LastEditTime: 2024-09-11 17:47:03
+LastEditTime: 2024-09-14 10:23:38
 FilePath: /tcl-influence-of-cutting-fluid/src/utils/minio_connector.py
 '''
 from minio import Minio
@@ -9,7 +9,7 @@ from minio.commonconfig import CopySource
 
 # 创建Minio客户端
 client = Minio(
-    '10.202.114.56:31743',  # MinIO服务器的URL
+    '10.171.204.60:30799',  # MinIO服务器的URL
     access_key='AKIAIOSFODNN7EXAMPLA',  # 访问密钥
     secret_key='wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEA',  # 秘密密钥
     secure=False
