@@ -1,7 +1,7 @@
 '''
 LastEditors: renyumm strrenyumm@gmail.com
 Date: 2024-09-10 11:22:39
-LastEditTime: 2024-09-14 11:45:47
+LastEditTime: 2024-09-18 10:55:09
 FilePath: /tcl-influence-of-cutting-fluid/src/api/app.py
 '''
 from fastapi import FastAPI
@@ -49,6 +49,8 @@ async def basic_info(item: basicInfoItem):
     '''
     基本信息
     '''
+    item.sessionid = item.sessionid.replace(' ', '')
+    print(item)
     copy_and_rename_folder('rym-best-fluid', 'rym-best-fluid', '/test/', f'/{item.sessionid}/') 
     
     with open('src/settings/data.yaml', 'r') as f:
@@ -79,6 +81,8 @@ async def plot_data(item: plotItem):
     '''
     3D 图表数据
     '''
+    item.sessionid = item.sessionid.replace(' ', '')
+    print(item)
     if not item.axis:
         item.axis = ['成品电导率', '成品浊度', '成品温度']
     
@@ -95,6 +99,8 @@ async def formula_data(item: formulaItem):
     '''
     最佳配方数据
     '''
+    item.sessionid = item.sessionid.replace(' ', '')
+    print(item)
     if not item.axis:
         item.axis = ['成品电导率', '成品浊度', '成品温度']
         
